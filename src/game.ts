@@ -1,22 +1,22 @@
 class Game {
-  private startMenu: StartMenu;
+  // private startMenu: StartMenu;
+  private HowToPlay: HowToPlay;
 
   constructor() {
-    this.startMenu = new StartMenu();
+    // this.startMenu = new StartMenu();
+    this.HowToPlay = new HowToPlay();
   }
 
   public update() {
-      this.startMenu.update();
-
+    // this.startMenu.update();
+    this.HowToPlay.update();
   }
 
   public draw() {
-    background("lightblue");
-    this.startMenu.draw();
+    background("#F0DEB5");
+    // this.startMenu.draw();
+    this.HowToPlay.draw();
   }
-  
 
-  public changeScreen(screen: any) {
-    
-  }
+  public changeScreen(IScreen: any) {}
 }

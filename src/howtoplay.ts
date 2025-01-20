@@ -2,17 +2,8 @@ class HowToPlay implements IScreen {
   private returnButton: Button;
 
   constructor() {
-    this.returnButton = new Button("RETURN", "F0AB63", 350, 100, 500, 300);
+    this.returnButton = new Button("RETURN", "#F0AB63", 350, 100, 500, 300);
   }
-
-  public draw() {
-    this.drawTitle();
-    this.drawText();
-    this.drawButtons();
-    this.drawInstructionImage();
-  }
-
-  public update() {}
 
   private drawTitle() {
     fill("#0000");
@@ -36,6 +27,13 @@ class HowToPlay implements IScreen {
   private drawButtons() {
     this.returnButton.draw();
   }
+  public update() {}
 
   private drawInstructionImage() {}
+  public draw() {
+    this.drawTitle();
+    this.drawText();
+    this.drawButtons();
+    this.drawInstructionImage();
+  }
 }
