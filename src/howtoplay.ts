@@ -2,26 +2,35 @@ class HowToPlay implements IScreen {
   private returnButton: Button;
 
   constructor() {
-    this.returnButton = new Button("RETURN", "#F0AB63", 350, 100, 500, 300);
+    this.returnButton = new Button("RETURN", "#F0AB63", 600, 600, 200, 70);
   }
 
   private drawTitle() {
-    fill("#0000");
+    push();
+    fill("#000");
     textFont("Fredoka", 50);
     textStyle(BOLD);
     textAlign("center", "center");
-    text("HOW TO PLAY", 705, 115);
+    text("HOW TO PLAY", width / 2, 100);
+    pop();
   }
 
   private drawText() {
-    fill("#0000");
-    textFont("Fredoka", 30);
-    textAlign("center", "center");
+    const marginX = 200; // Marginal från vänster och höger
+    const marginY = 150; // Marginal från toppen
+    const textWidth = width - marginX * 2;
+
+    push();
+    fill("#000");
+    textFont("Fredoka", 20);
+    textAlign(LEFT, TOP);
     text(
-      "Ett fartfyllt multiplayer plattformsspel där upp till 4 spelare tar rollen som söta kattkaraktärer. Spelplanen skrollar ständigt uppåt och spelarna måste ta sig upp mellan slumpmässigt genererade block för att undvika att falla utanför skärmens nederkant. Man kan hoppa ut från spelets höger- och vänstersida och komma fram på den andra sidan för att komma åt svåra plattformshopp. Den spelare som kan hålla sig kvar längst utan att falla blir den ultimata kattklättraren. Använd power-ups för att ge dig själv en fördel eller för att sabotera dina motståndare i denna hektiska, konkurrenskraftiga klättring mot toppen.",
-      705,
-      115
+      "Purrfect leap is a fast-paced single- or multiplayer platform game where up to 4 players take on the roles of adorable cat characters. As the game board scrolls continuously upwards, the players must climb through the blocks by steering the characters to jump left or right with the keyboard. The mission is to avoid falling off the bottom of the screen. Watch out for broken platforms as they will fall apart when jumping on them. You can jump off the game's right or left side and appear on the opposite side to tackle challenging platform jumps. The player who manages to stay in the game the longest without falling becomes the ultimate cat climber.",
+      marginX,
+      marginY,
+      textWidth
     );
+    pop();
   }
 
   private drawButtons() {
