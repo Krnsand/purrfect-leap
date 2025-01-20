@@ -23,7 +23,16 @@ class GameEntity {
   }
 
   public draw() {
-    // rita ut entitet med p5 metoder
+    if (this.img && this.img.length > 0) {
+      image(
+        this.img[this.imageIndex],
+        this.posX,
+        this.posY,
+        this.width,
+        this.height
+      );
+      // rita ut entitet med p5 metoder
+    }
   }
   public update() {}
 }

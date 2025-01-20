@@ -3,15 +3,22 @@
 <head>
   <style>
     html,
-    body,
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: black;
+    }
     canvas {
       height: 100%;
       width: 100%;
       margin: 0;
-      background: black;
     }
   </style>
-
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+    </style>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/addons/p5.sound.js"></script>
   <script src="build/bundle.js"></script>

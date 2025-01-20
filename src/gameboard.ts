@@ -13,7 +13,7 @@ class GameBoard {
 
     }
 
-    private spawnplatform() {
+    private spawnPlayer() {
 
     }
 

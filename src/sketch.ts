@@ -3,6 +3,8 @@ let game: Game;
 let music: {
   mystery: p5.SoundFile;
 };
+let playerImages: p5.Image[] = [];
+let player1: Player;
 
 /**
  * Built in preload function in P5
@@ -13,6 +15,10 @@ function preload() {
   music = {
     mystery: loadSound("/assets/music/mystery.mp3"),
   };
+  playerImages.push(loadImage("/assets/images/cats/Purr1.jpg"));
+  playerImages.push(loadImage("/assets/images/cats/Purr2.jpg"));
+  playerImages.push(loadImage("/assets/images/cats/Purr3.jpg"));
+  playerImages.push(loadImage("/assets/images/cats/Purr4.jpg"));
 }
 
 /**
@@ -27,6 +33,7 @@ function setup() {
   music.mystery.setVolume(0.8);
 
   game = new Game();
+  player1 = new Player(100, 200, 50, 50, playerImages, 0);
 }
 
 /**
@@ -37,4 +44,6 @@ function setup() {
 function draw() {
   game.update();
   game.draw();
+  player1.renderPlayer();
+  player1.leftAndRight();
 }
