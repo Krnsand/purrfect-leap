@@ -51,10 +51,3 @@ function draw() {
   // player1.leftAndRight();
 }
 
-function keyPressed() {
-  playerSelect.keyPressed();
-}
-
-function keyReleased() {
-  playerSelect.keyReleased();
-}
