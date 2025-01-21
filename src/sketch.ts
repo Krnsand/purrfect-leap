@@ -16,10 +16,6 @@ function preload() {
   music = {
     mystery: loadSound("/assets/music/mystery.mp3"),
   };
-  // playerImages.push(loadImage("/assets/images/cats/Purr1.jpg"));
-  // playerImages.push(loadImage("/assets/images/cats/Purr2.jpg"));
-  // playerImages.push(loadImage("/assets/images/cats/Purr3.jpg"));
-  // playerImages.push(loadImage("/assets/images/cats/Purr4.jpg"));
 }
 
 /**
@@ -34,8 +30,6 @@ function setup() {
   music.mystery.setVolume(0.8);
 
   game = new Game();
-  player1 = new Player(100, 200, 50, 50, playerImages, 0);
-  playerSelect = new PlayerSelect();
 }
 
 /**
@@ -46,8 +40,4 @@ function setup() {
 function draw() {
   game.update();
   game.draw();
-  player1.renderPlayer();
-  playerSelect.draw();
-  // player1.leftAndRight();
-}
 

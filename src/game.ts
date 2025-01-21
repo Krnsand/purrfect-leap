@@ -1,22 +1,43 @@
 class Game {
-  // private GameEnd: GameEnd;
-  private playerSelect: PlayerSelect;
+  private activeScreen: IScreen;
 
   constructor() {
-    // this.GameEnd = new GameEnd();
-    this.playerSelect = new PlayerSelect();
+    this.activeScreen = new StartMenu();
   }
 
   public update() {
-    // this.GameEnd.update();
-    this.playerSelect.update();
+    this.activeScreen.update();
   }
 
   public draw() {
     background("#F0DEB5");
-    // this.GameEnd.draw();
-    this.playerSelect.draw();
+    this.activeScreen.draw();
   }
 
-  public changeScreen(screen: any) {}
+  public changeScreen(
+    screenName:
+      | "StartMenu"
+      | "PlayerSelect"
+      | "HowToPlay"
+      | "GameBoard"
+      | "GameEnd",
+  ) {
+    switch (screenName) {
+      case "StartMenu":
+        this.activeScreen = new StartMenu();
+        break;
+      case "PlayerSelect":
+        this.activeScreen = new PlayerSelect();
+        break;
+      case "HowToPlay":
+        this.activeScreen = new HowToPlay();
+        break;
+      case "GameBoard":
+        this.activeScreen = new GameBoard();
+        break;
+      case "GameEnd":
+        this.activeScreen = new GameEnd();
+        break;
+    }
+  }
 }

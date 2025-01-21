@@ -36,7 +36,11 @@ class StartMenu implements IScreen {
     } else if (keyIsDown(UP_ARROW)) {
       this.activeButtonIndex = 0;
     } else if (keyIsDown(ENTER)) {
-      this.activateButton(this.activeButtonIndex);
+      if (this.activeButtonIndex === 0) {
+        game.changeScreen("PlayerSelect");
+      } else if (this.activeButtonIndex === 1) {
+        game.changeScreen("HowToPlay");
+      }
     }
   }
 
@@ -49,13 +53,5 @@ class StartMenu implements IScreen {
     pop();
     this.drawTitle();
     this.drawButtons();
-  }
-
-  private activateButton(index: number) {
-    if (index === 0) {
-      // Change to PlayerSelect
-    } else if (index === 1) {
-      // Change to HowToPlay
-    }
   }
 }

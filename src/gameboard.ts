@@ -1,4 +1,4 @@
-class GameBoard {
+class GameBoard implements IScreen {
   public backgroundImage: string;
   private backgroundMusic: string;
   private gameEntity: GameEntity[];
@@ -12,4 +12,8 @@ class GameBoard {
   private updateTime() {}
 
   private detectHit() {}
+
+  public update() {}
+
+  public draw() {}
 }
