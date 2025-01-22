@@ -1,8 +1,13 @@
 class HowToPlay implements IScreen {
   private returnButton: Button;
+  private controlImage: p5.Image;
+  private enterKeyHasBeenReleased: boolean;
 
   constructor() {
-    this.returnButton = new Button("RETURN", "#F0AB63", 600, 600, 200, 70);
+    this.returnButton = new Button("RETURN", "#F0AB63", 575, 600, 200, 70);
+    this.controlImage = loadImage(
+      "/assets/images/control/keyboard-control.png"
+    );
   }
 
   private drawTitle() {
@@ -36,9 +41,15 @@ class HowToPlay implements IScreen {
   private drawButtons() {
     this.returnButton.draw();
   }
-  public update() {}
+  public update() {
+    if (keyIsDown(ENTER) && this.enterKeyHasBeenReleased) {
+      game.changeScreen("StartMenu");
+    }
+  }
 
-  private drawInstructionImage() {}
+  private drawInstructionImage() {
+    image(this.controlImage, 270, 300, 800, 350);
+  }
   public draw() {
     this.drawTitle();
     this.drawText();
