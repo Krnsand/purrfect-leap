@@ -12,7 +12,7 @@ class GameEntity {
     posX: number,
     posY: number,
     img: p5.Image[],
-    imageIndex: number
+    imageIndex: number,
   ) {
     this.height = height;
     this.width = width;
@@ -29,7 +29,7 @@ class GameEntity {
         this.posX,
         this.posY,
         this.width,
-        this.height
+        this.height,
       );
       // rita ut entitet med p5 metoder
     }

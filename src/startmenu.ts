@@ -1,25 +1,66 @@
-class StartMenu implements Screen {
-  private startButton: Button;
+class StartMenu implements IScreen {
+  private buttons: Button[];
+  private activeButtonIndex: number;
+  private enterKeyHasBeenReleased: boolean;
 
   constructor() {
-    this.startButton = new Button("START", "#F96B6B", 100, 50, 750, 280);
+    this.enterKeyHasBeenReleased = false;
+    this.buttons = [
+      new Button("START", "#F96B6B", width * 0.5, 280, 350, 100, 0),
+      new Button("HOW TO PLAY", "#F0AB63", width * 0.5, 410, 350, 100, 1),
+    ];
+
+    this.activeButtonIndex = 0;
   }
 
   private drawButtons() {
-    this.startButton.draw();
+    this.buttons.forEach((button) => {
+      button.draw(button.buttonIndex === this.activeButtonIndex);
+    });
   }
 
   private drawTitle() {
-    fill("#000");
-    stroke("#FFF");
-    textFont("Arial", 30); //test, should be Fredroka One
-    textAlign("center");
-    text("PURRFECT LEAP", 750, 150);
+    push();
+    fill("#8B8985");
+    textFont("Fredoka", 80);
+    textStyle(BOLD);
+    textAlign("center", "center");
+    text("PURRFECT LEAP", 705, 105);
+
+    fill("#F96B6B");
+    text("PURRFECT LEAP", 700, 100);
+    pop();
   }
 
-  public update() {}
+  public update() {
+    if (keyIsDown(ENTER) && this.enterKeyHasBeenReleased) {
+      if (this.activeButtonIndex === 0) {
+        game.changeScreen("PlayerSelect");
+      } else if (this.activeButtonIndex === 1) {
+        game.changeScreen("HowToPlay");
+      }
+    }
+
+    if (keyIsDown(DOWN_ARROW)) {
+      this.activeButtonIndex = +1;
+    } else if (keyIsDown(UP_ARROW)) {
+      this.activeButtonIndex = 0;
+    }
+
+    if (!keyIsDown(ENTER)) {
+      this.enterKeyHasBeenReleased = true;
+    }
+  }
+
+  public setup() {}
 
   public draw() {
+    push();
+    rectMode(CENTER);
+    fill("#C2E1B5");
+    noStroke();
+    rect(width * 0.5, 350, 580, 340, 50);
+    pop();
     this.drawTitle();
     this.drawButtons();
   }

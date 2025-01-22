@@ -1,27 +1,38 @@
 class GameEnd implements IScreen {
-  private playAgainButton: Button;
-  private startMenuButton: Button;
+  private buttons: Button[];
+  private activeButtonIndex: number;
+  private deadCat: p5.Image;
+  private enterKeyHasBeenReleased: boolean;
 
   constructor() {
-    this.playAgainButton = new Button(
-      "PLAY AGAIN",
-      "#c2e1b5",
-      300,
-      500,
-      300,
-      100
-    );
-    this.startMenuButton = new Button(
-      "MAIN MENU",
-      "#f0ab63",
-      800,
-      500,
-      300,
-      100
-    );
+    this.enterKeyHasBeenReleased = false;
+    this.buttons = [
+      new Button("PLAY AGAIN", "#c2e1b5", 450, 500, 300, 100, 0),
+      new Button("MAIN MENU", "#f0ab63", 950, 500, 300, 100, 1),
+    ];
+    this.activeButtonIndex = 0;
+    this.deadCat = loadImage("/assets/images/cats/skeletonHead.png");
   }
 
-  public update() {}
+  public update() {
+    if (keyIsDown(ENTER) && this.enterKeyHasBeenReleased) {
+      if (this.activeButtonIndex === 0) {
+        game.changeScreen("GameBoard");
+      } else if (this.activeButtonIndex === 1) {
+        game.changeScreen("StartMenu");
+      }
+    }
+
+    if (keyIsDown(RIGHT_ARROW)) {
+      this.activeButtonIndex = +1;
+    } else if (keyIsDown(LEFT_ARROW)) {
+      this.activeButtonIndex = 0;
+    }
+
+    if (!keyIsDown(ENTER)) {
+      this.enterKeyHasBeenReleased = true;
+    }
+  }
 
   private drawTitle() {
     push();
@@ -29,18 +40,20 @@ class GameEnd implements IScreen {
     textFont("Fredoka", 80);
     textStyle(BOLD);
     textAlign("center", "center");
-    // text("GAME OVER", 705, 115);
 
     fill("#F96B6B");
     text("GAME OVER", 700, 150);
     pop();
   }
 
-  private drawImage() {}
+  private drawImage() {
+    image(this.deadCat, 600, 250, 200, 150);
+  }
 
   private drawButtons() {
-    this.playAgainButton.draw();
-    this.startMenuButton.draw();
+    this.buttons.forEach((button) => {
+      button.draw(button.buttonIndex === this.activeButtonIndex);
+    });
   }
 
   public draw() {
@@ -48,4 +61,6 @@ class GameEnd implements IScreen {
     this.drawImage();
     this.drawButtons();
   }
+
+  public setup() {}
 }
