@@ -6,7 +6,7 @@ class Button {
   private width: number;
   private height: number;
   public buttonIndex: number;
-  private soundUrl: string;
+  private sound: p5.SoundFile; // Updated type
 
   constructor(
     text: string,
@@ -16,7 +16,7 @@ class Button {
     width: number,
     height: number,
     buttonIndex: number,
-    soundUrl: string
+    sound: p5.SoundFile // Pass sound object directly
   ) {
     this.text = text;
     this.color = color;
@@ -26,14 +26,22 @@ class Button {
     this.height = height;
     this.buttonIndex = buttonIndex;
     this.buttonIndex = buttonIndex;
-    this.soundUrl = soundUrl;
+    this.sound = sound;
   }
-
-    // Method to play the button sound
-    private playSound(): void {
-      const audio = new Audio(this.soundUrl); // Create an audio object with the sound URL
-      audio.play(); // Play the sound
+  
+  // Method to play the button sound
+  private playSound(): void {
+    if (this.sound.isLoaded()) { // Ensure this.sound is a valid p5.SoundFile
+      this.sound.play();
+    } else {
+      console.error(`Sound not loaded for button: ${this.text}`);
     }
+  }
+  
+  public handleActivate() {
+    this.playSound(); // Play sound on activation
+    console.log(`Button activated: ${this.text}`);
+  }
 
   public draw(isActive: boolean) {
     // Draw button rectangle
@@ -77,11 +85,4 @@ class Button {
     }
   }
 
-  public handleActivate() {
-    if (this.sound && this.sound.isLoaded()) {
-      this.sound.play();
-    } else {
-      console.error(`Sound not loaded for button: ${this.text}`);
-    }
-  }
 }

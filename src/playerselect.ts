@@ -23,7 +23,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       0,
-      "boing.mp3",
+      sound.chooseSound, // Use preloaded sound,
     );
     this.playerSelectButton2 = new Button(
       "2 PLAYER",
@@ -33,7 +33,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       1,
-      "boing.mp3",
+      sound.chooseSound, // Use preloaded sound,
     );
     this.playerSelectButton3 = new Button(
       "3 PLAYER",
@@ -43,7 +43,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       2,
-      "boing.mp3",
+      sound.chooseSound, // Use preloaded sound,
     );
     this.playerSelectButton4 = new Button(
       "4 PLAYER",
@@ -53,7 +53,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       3,
-      "boing.mp3",
+      sound.chooseSound, // Use preloaded sound,
     );
     this.gameStartButton = new Button(
       "START GAME",
@@ -63,7 +63,7 @@ class PlayerSelect implements IScreen {
       350,
       150,
       4,
-      "boing.mp3"
+      sound.enterSound, // Use enter sound
     );
 
     this.activeButtonIndex = 0;
@@ -111,7 +111,6 @@ class PlayerSelect implements IScreen {
   }
 
   private activateButton(index: number) {
-    // Call the handleActivate method to play the button's sound
     switch (index) {
       case 0:
         this.playerSelectButton1.handleActivate();
@@ -132,47 +131,38 @@ class PlayerSelect implements IScreen {
       case 4:
         this.gameStartButton.handleActivate();
         console.log("START GAME selected");
-
-        // const controls = [{}, {}, {}, {}]
-
-
-        // const players: Player[] = [];
-        // const gameboard = new GameBoard(players);
-        // game.changeScreen("GameBoard");
-        // break;
+  
+        // Trigger the start game logic here (if any)
+        game.changeScreen("GameBoard"); // Ensure this logic is implemented
+        break;
+      default:
+        console.error("Invalid button index");
     }
   }
+  
 
   public update() {
     const pressedThisFrame = keyIsPressed && !this.prevIsKeyPressed;
-
+  
     if (pressedThisFrame) {
       if (keyCode === LEFT_ARROW && this.lastKeyPressed !== "LEFT") {
-        if (this.activeButtonIndex !== 4) {
-          this.activeButtonIndex = (this.activeButtonIndex - 1 + 4) % 4;
-        }
+        this.activeButtonIndex = (this.activeButtonIndex - 1 + 5) % 5;
         this.lastKeyPressed = "LEFT";
       } else if (keyCode === RIGHT_ARROW && this.lastKeyPressed !== "RIGHT") {
-        if (this.activeButtonIndex !== 4) {
-          this.activeButtonIndex = (this.activeButtonIndex + 1) % 4;
-        }
+        this.activeButtonIndex = (this.activeButtonIndex + 1) % 5;
         this.lastKeyPressed = "RIGHT";
       } else if (keyCode === ENTER) {
-        if (this.activeButtonIndex !== 4) {
-          this.lastPlayerButtonIndex = this.activeButtonIndex;
-          this.activeButtonIndex = 4;
-        } else {
-          this.activateButton(this.activeButtonIndex);
-        }
+        this.activateButton(this.activeButtonIndex);
       }
     }
-
+  
     if (!keyIsPressed && this.prevIsKeyPressed) {
       this.lastKeyPressed = null;
     }
-
+  
     this.prevIsKeyPressed = keyIsPressed;
   }
+  
 
   public draw() {
     fill("#F0DEB5");

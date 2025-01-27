@@ -14,8 +14,12 @@ let playerSelect: PlayerSelect;
  */
 function preload() {
   sound = {
-    chooseSound: loadSound("assets/sounds/boing.mp3"),
-    enterSound: loadSound("assets/sounds/boing.mp3"),
+    chooseSound: loadSound("/assets/sounds/boing.mp3", () =>
+      console.log("Choose sound loaded!")
+    ),
+    enterSound: loadSound("/assets/sounds/boing.mp3", () =>
+      console.log("Enter sound loaded!")
+    ),
   };
 }
 
