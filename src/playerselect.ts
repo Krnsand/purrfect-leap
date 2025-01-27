@@ -15,6 +15,9 @@ class PlayerSelect implements IScreen {
   // private isStartGameHighlighted: boolean;
 
   constructor() {
+    console.log("chooseSound:", sound.chooseSound);
+    console.log("enterSound:", sound.enterSound);
+
     this.playerSelectButton1 = new Button(
       "1 PLAYER",
       "#F96B6B",
@@ -23,7 +26,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       0,
-      sound.chooseSound, // Use preloaded sound,
+      sound.chooseSound // Use preloaded sound
     );
     this.playerSelectButton2 = new Button(
       "2 PLAYER",
@@ -33,7 +36,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       1,
-      sound.chooseSound, // Use preloaded sound,
+      sound.chooseSound
     );
     this.playerSelectButton3 = new Button(
       "3 PLAYER",
@@ -43,7 +46,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       2,
-      sound.chooseSound, // Use preloaded sound,
+      sound.chooseSound
     );
     this.playerSelectButton4 = new Button(
       "4 PLAYER",
@@ -53,7 +56,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       3,
-      sound.chooseSound, // Use preloaded sound,
+      sound.chooseSound
     );
     this.gameStartButton = new Button(
       "START GAME",
@@ -63,7 +66,7 @@ class PlayerSelect implements IScreen {
       350,
       150,
       4,
-      sound.enterSound, // Use enter sound
+      sound.enterSound // Use a different sound for the start button
     );
 
     this.activeButtonIndex = 0;
@@ -131,9 +134,7 @@ class PlayerSelect implements IScreen {
       case 4:
         this.gameStartButton.handleActivate();
         console.log("START GAME selected");
-  
-        // Trigger the start game logic here (if any)
-        game.changeScreen("GameBoard"); // Ensure this logic is implemented
+        game.changeScreen("GameBoard"); // Ensure this logic exists in your Game class
         break;
       default:
         console.error("Invalid button index");

@@ -6,7 +6,7 @@ class Button {
   private width: number;
   private height: number;
   public buttonIndex: number;
-  private sound: p5.SoundFile; // Updated type
+  private sound: p5.SoundFile | null; // Explicitly allow null for safety
 
   constructor(
     text: string,
@@ -16,7 +16,7 @@ class Button {
     width: number,
     height: number,
     buttonIndex: number,
-    sound: p5.SoundFile // Pass sound object directly
+    sound: p5.SoundFile | null // Allow null in case no sound is passed
   ) {
     this.text = text;
     this.color = color;
@@ -26,15 +26,21 @@ class Button {
     this.height = height;
     this.buttonIndex = buttonIndex;
     this.buttonIndex = buttonIndex;
-    this.sound = sound;
+    this.sound = sound; // Assign the sound file
   }
   
-  // Method to play the button sound
   private playSound(): void {
-    if (this.sound.isLoaded()) { // Ensure this.sound is a valid p5.SoundFile
-      this.sound.play();
+    if (this.sound instanceof p5.SoundFile) {
+      if (this.sound.isLoaded()) {
+        this.sound.play();
+      } else {
+        console.error(`Sound file not loaded for button: ${this.text}`);
+      }
     } else {
-      console.error(`Sound not loaded for button: ${this.text}`);
+      console.error(
+        `Invalid sound object for button: ${this.text}. Got:`,
+        this.sound
+      );
     }
   }
   
