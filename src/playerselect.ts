@@ -114,30 +114,17 @@ class PlayerSelect implements IScreen {
   }
 
   private activateButton(index: number) {
-    switch (index) {
-      case 0:
-        this.playerSelectButton1.handleActivate();
-        console.log("1 PLAYER selected");
-        break;
-      case 1:
-        this.playerSelectButton2.handleActivate();
-        console.log("2 PLAYER selected");
-        break;
-      case 2:
-        this.playerSelectButton3.handleActivate();
-        console.log("3 PLAYER selected");
-        break;
-      case 3:
-        this.playerSelectButton4.handleActivate();
-        console.log("4 PLAYER selected");
-        break;
-      case 4:
-        this.gameStartButton.handleActivate();
-        console.log("START GAME selected");
-        game.changeScreen("GameBoard"); // Ensure this logic exists in your Game class
-        break;
-      default:
-        console.error("Invalid button index");
+    if (index === 0) {
+      console.log("1 PLAYER selected");
+    } else if (index === 1) {
+      console.log("2 PLAYER selected");
+    } else if (index === 2) {
+      console.log("3 PLAYER selected");
+    } else if (index === 3) {
+      console.log("4 PLAYER selected");
+    } else if (index === 4) {
+      console.log("START GAME selected");
+      game.changeScreen(new GameBoard());
     }
   }
   

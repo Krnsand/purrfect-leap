@@ -35,9 +35,9 @@ class StartMenu implements IScreen {
   public update() {
     if (keyIsDown(ENTER) && this.enterKeyHasBeenReleased) {
       if (this.activeButtonIndex === 0) {
-        game.changeScreen("PlayerSelect");
+        game.changeScreen(new PlayerSelect());
       } else if (this.activeButtonIndex === 1) {
-        game.changeScreen("HowToPlay");
+        game.changeScreen(new HowToPlay());
       }
     }
 

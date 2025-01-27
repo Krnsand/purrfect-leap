@@ -55,8 +55,7 @@ class HowToPlay implements IScreen {
     if (keyIsDown(ENTER)) {
       if (this.enterKeyHasBeenReleased) {
         if (this.activeButtonIndex === 0) {
-          game.changeScreen("StartMenu");
-          console.log("Navigerar till StartMenu");
+          game.changeScreen(new StartMenu());
         }
         this.enterKeyHasBeenReleased = false;
       }

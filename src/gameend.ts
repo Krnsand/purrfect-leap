@@ -17,9 +17,9 @@ class GameEnd implements IScreen {
   public update() {
     if (keyIsDown(ENTER) && this.enterKeyHasBeenReleased) {
       if (this.activeButtonIndex === 0) {
-        game.changeScreen("GameBoard");
+        game.changeScreen(new GameBoard());
       } else if (this.activeButtonIndex === 1) {
-        game.changeScreen("StartMenu");
+        game.changeScreen(new StartMenu());
       }
     }
 

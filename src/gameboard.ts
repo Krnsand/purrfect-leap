@@ -17,7 +17,7 @@ class GameBoard implements IScreen {
     this.players = [];
     this.platforms = [];
     this.platformSpawnTimer = millis();
-    this.platformSpawnInterval = 2000;
+    this.platformSpawnInterval = 700;
     this.translateY = 0;
     this.time = new Time();
     this.startPlatform = null;
@@ -47,31 +47,44 @@ class GameBoard implements IScreen {
 
   private detectHit() {
     for (const player of this.players) {
-      for (const platform of this.platforms) {
-        const playerLeft = player.posX;
-        const playerRight = player.posX + player.width;
-        const platformLeft = platform.posX;
-        const platformRight = platform.posX + platform.width;
+      if (this.startPlatform) {
+        const startPlatformTop = 600 - this.translateY;
 
-        const playerTop = player.posY;
-        const playerBottom = player.posY + player.height;
-        const platformTop = platform.posY + this.translateY;
-        const platformBottom =
-          platform.posY + platform.height + this.translateY;
+        if (player.velocity > 0 && player.posY > startPlatformTop) {
+          player.automaticBounce(startPlatformTop + this.translateY);
+        }
+      }
 
-        if (
-          playerLeft < platformRight &&
-          playerRight > platformLeft &&
-          playerTop < platformBottom &&
-          playerBottom > platformTop
-        ) {
-          // if (gameObject instanceof Platform) {
-          // Avgör om man föll ner på plattformen först
-          // 1. flytta spelaren till ovanpå platformen
-          // 2. trigga stuts
-          // 3. spela ljud
-          //4.
-          // }
+      for (const player of this.players) {
+        for (const platform of this.platforms) {
+          const playerLeft = player.posX;
+          const playerRight = player.posX + player.width;
+          const platformLeft = platform.posX;
+          const platformRight = platform.posX + platform.width;
+
+          const playerTop = player.posY;
+          const playerBottom = player.posY + player.height;
+          const platformTop = platform.posY + this.translateY;
+          const platformBottom =
+            platform.posY + platform.height + this.translateY;
+
+          if (
+            player.velocity > 0 &&
+            playerLeft < platformRight &&
+            playerRight > platformLeft &&
+            playerTop < platformBottom &&
+            playerBottom > platformTop
+          ) {
+            player.automaticBounce(platformTop);
+
+            // if (gameObject instanceof Platform) {
+            // Avgör om man föll ner på plattformen först
+            // 1. flytta spelaren till ovanpå platformen
+            // 2. trigga stuts
+            // 3. spela ljud
+            //4.
+            // }
+          }
         }
       }
     }
@@ -84,9 +97,9 @@ class GameBoard implements IScreen {
   private spawnPlatform() {
     if (millis() - this.platformSpawnTimer > this.platformSpawnInterval) {
       const newPlatform = new Platform(
-        50,
-        200,
-        random(50, 1350),
+        30,
+        100,
+        random(100, 1300),
         50 - this.translateY,
         this.playerImages,
         8,
@@ -104,7 +117,7 @@ class GameBoard implements IScreen {
   }
 
   private spawnPlayer() {
-    this.players.push(new Player(150, 200, 200, 300, this.playerImages, 0));
+    this.players.push(new Player(75, 100, 200, 300, this.playerImages, 0));
   }
 
   public update() {
@@ -121,7 +134,7 @@ class GameBoard implements IScreen {
       this.startPlatformSpawned = true;
     }
 
-    if (this.startPlatform && millis() - this.startPlatformSpawnTime > 5000) {
+    if (this.startPlatform && millis() - this.startPlatformSpawnTime > 7000) {
       this.startPlatform = null;
     }
 
