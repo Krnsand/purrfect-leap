@@ -6,6 +6,7 @@ class Button {
   private width: number;
   private height: number;
   public buttonIndex: number;
+  private soundUrl: string;
 
   constructor(
     text: string,
@@ -15,6 +16,7 @@ class Button {
     width: number,
     height: number,
     buttonIndex: number,
+    soundUrl: string
   ) {
     this.text = text;
     this.color = color;
@@ -24,7 +26,14 @@ class Button {
     this.height = height;
     this.buttonIndex = buttonIndex;
     this.buttonIndex = buttonIndex;
+    this.soundUrl = soundUrl;
   }
+
+    // Method to play the button sound
+    private playSound(): void {
+      const audio = new Audio(this.soundUrl); // Create an audio object with the sound URL
+      audio.play(); // Play the sound
+    }
 
   public draw(isActive: boolean) {
     // Draw button rectangle
@@ -65,6 +74,14 @@ class Button {
       strokeWeight(10);
       rect(this.posX, this.posY, this.width, this.height, 20);
       pop();
+    }
+  }
+
+  public handleActivate() {
+    if (this.sound && this.sound.isLoaded()) {
+      this.sound.play();
+    } else {
+      console.error(`Sound not loaded for button: ${this.text}`);
     }
   }
 }

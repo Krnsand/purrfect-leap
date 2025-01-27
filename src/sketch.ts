@@ -1,7 +1,8 @@
 //---- GLOBAL VARIABLES ----//
 let game: Game;
-let music: {
-  mystery: p5.SoundFile;
+let sound: {
+  chooseSound: p5.SoundFile;
+  enterSound: p5.SoundFile;
 };
 // let playerImages: p5.Image[];
 let playerSelect: PlayerSelect;
@@ -12,8 +13,9 @@ let playerSelect: PlayerSelect;
  * sound files, images etc...
  */
 function preload() {
-  music = {
-    mystery: loadSound("/assets/music/mystery.mp3"),
+  sound = {
+    chooseSound: loadSound("assets/sounds/boing.mp3"),
+    enterSound: loadSound("assets/sounds/boing.mp3"),
   };
 }
 
@@ -26,7 +28,8 @@ function preload() {
 function setup() {
   createCanvas(1400, 700);
   frameRate(60);
-  music.mystery.setVolume(0.8);
+  sound.chooseSound.setVolume(0.8);
+  sound.enterSound.setVolume(0.8);
   game = new Game();
 }
 

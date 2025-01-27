@@ -23,6 +23,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       0,
+      "boing.mp3",
     );
     this.playerSelectButton2 = new Button(
       "2 PLAYER",
@@ -32,6 +33,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       1,
+      "boing.mp3",
     );
     this.playerSelectButton3 = new Button(
       "3 PLAYER",
@@ -41,6 +43,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       2,
+      "boing.mp3",
     );
     this.playerSelectButton4 = new Button(
       "4 PLAYER",
@@ -50,6 +53,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       3,
+      "boing.mp3",
     );
     this.gameStartButton = new Button(
       "START GAME",
@@ -59,6 +63,7 @@ class PlayerSelect implements IScreen {
       350,
       150,
       4,
+      "boing.mp3"
     );
 
     this.activeButtonIndex = 0;
@@ -91,11 +96,14 @@ class PlayerSelect implements IScreen {
 
   private drawPlayerImages() {
     image(this.playerImage1, 160, 160, 120, 100);
+
     image(this.playerImage1, 460, 160, 120, 100);
     image(this.playerImage2, 530, 185, 120, 100);
+
     image(this.playerImage1, 780, 160, 120, 100);
     image(this.playerImage2, 850, 185, 120, 100);
     image(this.playerImage3, 760, 220, 120, 100);
+
     image(this.playerImage1, 1105, 160, 120, 100);
     image(this.playerImage2, 1175, 185, 120, 100);
     image(this.playerImage3, 1085, 220, 120, 100);
@@ -103,17 +111,35 @@ class PlayerSelect implements IScreen {
   }
 
   private activateButton(index: number) {
-    if (index === 0) {
-      console.log("1 PLAYER selected");
-    } else if (index === 1) {
-      console.log("2 PLAYER selected");
-    } else if (index === 2) {
-      console.log("3 PLAYER selected");
-    } else if (index === 3) {
-      console.log("4 PLAYER selected");
-    } else if (index === 4) {
-      console.log("START GAME selected");
-      game.changeScreen("GameBoard");
+    // Call the handleActivate method to play the button's sound
+    switch (index) {
+      case 0:
+        this.playerSelectButton1.handleActivate();
+        console.log("1 PLAYER selected");
+        break;
+      case 1:
+        this.playerSelectButton2.handleActivate();
+        console.log("2 PLAYER selected");
+        break;
+      case 2:
+        this.playerSelectButton3.handleActivate();
+        console.log("3 PLAYER selected");
+        break;
+      case 3:
+        this.playerSelectButton4.handleActivate();
+        console.log("4 PLAYER selected");
+        break;
+      case 4:
+        this.gameStartButton.handleActivate();
+        console.log("START GAME selected");
+
+        // const controls = [{}, {}, {}, {}]
+
+
+        // const players: Player[] = [];
+        // const gameboard = new GameBoard(players);
+        // game.changeScreen("GameBoard");
+        // break;
     }
   }
 
