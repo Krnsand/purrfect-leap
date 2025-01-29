@@ -14,6 +14,7 @@ class HowToPlay implements IScreen {
       200,
       70,
       0,
+      sound.menuSound,
     );
     this.controlImage = loadImage("/assets/images/control-image/keyboard.png");
     this.activeButtonIndex = 0;
@@ -55,7 +56,8 @@ class HowToPlay implements IScreen {
     if (keyIsDown(ENTER)) {
       if (this.enterKeyHasBeenReleased) {
         if (this.activeButtonIndex === 0) {
-          game.changeScreen(new StartMenu());
+          this.returnButton.handleActivate(); 
+          game.changeScreen(new StartMenu()); 
         }
         this.enterKeyHasBeenReleased = false;
       }

@@ -11,12 +11,14 @@ class GameBoard implements IScreen {
   private startPlatform: Platform | null;
   private startPlatformSpawnTime: number;
   private startPlatformSpawned: boolean;
+  private speedUpCounter: number;
+  private gameStartTime: number;
 
   constructor(players: Player[]) {
     this.players = players;
     this.platforms = [];
     this.platformSpawnTimer = millis();
-    this.platformSpawnInterval = 700;
+    this.platformSpawnInterval = 500;
     this.translateY = 0;
     this.time = new Time();
     this.startPlatform = null;
@@ -24,6 +26,8 @@ class GameBoard implements IScreen {
     this.startPlatformSpawned = false;
     this.platformImages = [];
     this.loadImages();
+    this.speedUpCounter = 2;
+    this.gameStartTime = millis();
   }
 
   private loadImages() {
@@ -31,13 +35,18 @@ class GameBoard implements IScreen {
       "/assets/images/background/purrfectLeapBackground.jpg",
     );
     this.platformImages = [];
-    this.platformImages[0] = loadImage(
-      "/assets/images/platforms/starting-platform.png",
-    );
-    this.platformImages[1] = loadImage("/assets/images/platforms/Platform.png");
-    this.platformImages[2] = loadImage(
-      "/assets/images/platforms/PlatformBroken.png",
-    );
+    (this.platformImages[0] = loadImage(
+      "/assets/images/platforms/startPlatform.png",
+    )),
+      (this.platformImages[1] = loadImage(
+        "/assets/images/platforms/startPlatformFlashing.gif",
+      )),
+      (this.platformImages[2] = loadImage(
+        "/assets/images/platforms/Platform.png",
+      )),
+      (this.platformImages[3] = loadImage(
+        "/assets/images/platforms/PlatformBroken.png",
+      ));
   }
 
   private detectHit() {
@@ -64,22 +73,23 @@ class GameBoard implements IScreen {
             platform.posY + platform.height + this.translateY;
 
           if (
-            player.velocity > 0 &&
+            player.velocity > 2 &&
             playerLeft < platformRight &&
             playerRight > platformLeft &&
-            playerTop < platformBottom &&
-            playerBottom > platformTop
+            playerBottom >= platformTop &&
+            playerBottom < platformBottom &&
+            playerTop < platformTop
           ) {
             player.automaticBounce(platformTop);
 
             if (platform.isBreakable) {
               platform.breakApart();
-  
+
               // If durability is 0, remove the platform from the platform array
               if (platform.durability <= 0) {
                 const index = this.platforms.indexOf(platform);
                 if (index > -1) {
-                  this.platforms.splice(index, 1);  // Remove the broken platform from the array
+                  this.platforms.splice(index, 1); // Remove the broken platform from the array
                 }
               }
 
@@ -97,6 +107,17 @@ class GameBoard implements IScreen {
     }
   }
 
+  private speedUpGame() {
+    const gameTime = millis() - this.gameStartTime;
+    if (gameTime >= 40 * 1000) {
+      this.speedUpCounter = 5;
+    } else if (gameTime >= 30 * 1000) {
+      this.speedUpCounter = 3.5;
+    } else if (gameTime >= 20 * 1000) {
+      this.speedUpCounter = 2.5;
+    }
+  }
+
   private drawBackground() {
     image(this.backgroundImage, 0, 0, 1400, 700);
   }
@@ -104,10 +125,10 @@ class GameBoard implements IScreen {
   private spawnPlatform() {
     if (millis() - this.platformSpawnTimer > this.platformSpawnInterval) {
       // create a new array that excludes start-platform image
-      const platformOnlyImages = this.platformImages.slice(1);
+      const platformOnlyImages = this.platformImages.slice(2);
 
       const isBreakable = random() < 0.2;
-      // if isBreakable = true then use imageIndex 1 or else 0
+      // if isBreakable = true then use imageIndex 2 or else 1
       const imageIndex = isBreakable ? 1 : 0;
 
       const newPlatform = new Platform(
@@ -129,9 +150,9 @@ class GameBoard implements IScreen {
 
   private spawnStartPlatform() {
     this.startPlatform = new Platform(
+      70,
+      1200,
       100,
-      900,
-      250,
       600,
       [this.platformImages[0]],
       0,
@@ -141,9 +162,24 @@ class GameBoard implements IScreen {
     this.startPlatformSpawnTime = millis();
   }
 
-  private playersAreDead() {
-    // checks if all the players are dead
-    return this.players.every((player) => player.isDead);
+  private checkForWinner() {
+    const alivePlayers = this.players.filter((player) => player.isAlive);
+
+    if (this.players.length === 1) {
+      // Singleplayer-logik
+      if (alivePlayers.length === 0) {
+        game.changeScreen(new GameEnd(null));
+      }
+    } else {
+      // Multiplayer-logik
+      if (alivePlayers.length === 1) {
+        const lastPlayerStanding = alivePlayers[0];
+        lastPlayerStanding.onDeath = () => {
+          const winnerIndex = this.players.indexOf(lastPlayerStanding);
+          game.changeScreen(new GameEnd(winnerIndex));
+        };
+      }
+    }
   }
 
   public update() {
@@ -160,6 +196,10 @@ class GameBoard implements IScreen {
       this.startPlatformSpawned = true;
     }
 
+    if (this.startPlatform && millis() - this.startPlatformSpawnTime > 5000) {
+      this.startPlatform.imageIndex = 0;
+    }
+
     if (this.startPlatform && millis() - this.startPlatformSpawnTime > 7000) {
       this.startPlatform = null;
     }
@@ -171,16 +211,16 @@ class GameBoard implements IScreen {
         player.die();
       }
     });
-    // if all players are dead change screen to GameEnd
-    if (this.playersAreDead()) {
-      game.changeScreen(new GameEnd());
-    }
 
-    this.translateY += 2;
+    this.translateY += this.speedUpCounter;
 
     this.detectHit();
 
     this.removeOffScreenPlatforms();
+
+    this.speedUpGame();
+
+    this.checkForWinner();
   }
 
   private removeOffScreenPlatforms() {

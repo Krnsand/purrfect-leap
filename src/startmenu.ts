@@ -6,8 +6,8 @@ class StartMenu implements IScreen {
   constructor() {
     this.enterKeyHasBeenReleased = false;
     this.buttons = [
-      new Button("START", "#F96B6B", width * 0.5, 280, 350, 100, 0),
-      new Button("HOW TO PLAY", "#F0AB63", width * 0.5, 410, 350, 100, 1),
+      new Button("START", "#F96B6B", width * 0.5, 280, 350, 100, 0, sound.chooseSound),
+      new Button("HOW TO PLAY", "#F0AB63", width * 0.5, 410, 350, 100, 1, sound.chooseSound),
     ];
 
     this.activeButtonIndex = 0;
@@ -34,6 +34,9 @@ class StartMenu implements IScreen {
 
   public update() {
     if (keyIsDown(ENTER) && this.enterKeyHasBeenReleased) {
+      this.enterKeyHasBeenReleased = false;
+      // Play sound for the active button
+      this.buttons[this.activeButtonIndex].handleActivate();
       if (this.activeButtonIndex === 0) {
         game.changeScreen(new PlayerSelect());
       } else if (this.activeButtonIndex === 1) {

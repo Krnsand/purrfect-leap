@@ -4,6 +4,7 @@ class PlayerSelect implements IScreen {
   private playerSelectButton3: Button;
   private playerSelectButton4: Button;
   private gameStartButton: Button;
+  private returnButton: Button;
   private activeButtonIndex: number;
   private lastKeyPressed: string | null;
   private playerImage1: p5.Image;
@@ -23,7 +24,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       0,
-      sound.chooseSound // Use preloaded sound
+      sound.catSound1 
     );
     this.playerSelectButton2 = new Button(
       "2 PLAYER",
@@ -33,7 +34,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       1,
-      sound.chooseSound
+      sound.catSound2
     );
     this.playerSelectButton3 = new Button(
       "3 PLAYER",
@@ -43,7 +44,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       2,
-      sound.chooseSound
+      sound.catSound3
     );
     this.playerSelectButton4 = new Button(
       "4 PLAYER",
@@ -53,7 +54,7 @@ class PlayerSelect implements IScreen {
       250,
       100,
       3,
-      sound.chooseSound
+      sound.catSound4
     );
     this.gameStartButton = new Button(
       "START GAME",
@@ -63,7 +64,17 @@ class PlayerSelect implements IScreen {
       350,
       150,
       4,
-      sound.enterSound // Use a different sound for the start button
+      sound.enterSound 
+    );
+    this.returnButton = new Button(
+      "RETURN",
+      "#F0AB63",
+      width * 0.5,
+      625,
+      200,
+      70,
+      5,
+      sound.menuSound,
     );
  
 
@@ -93,6 +104,7 @@ class PlayerSelect implements IScreen {
       this.activeButtonIndex === 3 || this.lastPlayerButtonIndex === 3,
     );
     this.gameStartButton.draw(this.activeButtonIndex === 4);
+    this.returnButton.draw(this.activeButtonIndex === 5);
   }
 
   private drawPlayerImages() {
@@ -111,21 +123,6 @@ class PlayerSelect implements IScreen {
     image(this.playerImage3, 1085, 220, 120, 100);
     image(this.playerImage4, 1170, 240, 130, 110);
   }
-
-  // private activateButton(index: number) {
-  //   if (index === 0) {
-  //     console.log("1 PLAYER selected");
-  //   } else if (index === 1) {
-  //     console.log("2 PLAYER selected");
-  //   } else if (index === 2) {
-  //     console.log("3 PLAYER selected");
-  //   } else if (index === 3) {
-  //     console.log("4 PLAYER selected");
-  //   } else if (index === 4) {
-  //     console.log("START GAME selected");
-  //     game.changeScreen(new GameBoard());
-  //   }
-  // }
 
   private activateButton(index: number) {
     switch (index) {
@@ -152,7 +149,7 @@ class PlayerSelect implements IScreen {
       case 4:
         this.gameStartButton.handleActivate();
         console.log("START GAME selected");
-  
+    
         if (this.selectedPlayers > 0) {
           const playerImages: p5.Image[][] = [
             [
@@ -223,9 +220,14 @@ class PlayerSelect implements IScreen {
           game.changeScreen(gameBoard);
         } 
         break;
-      default:
-        console.error("Invalid button index");
-    }
+    case 5: 
+      this.returnButton.handleActivate();
+      console.log("RETURN to Start Menu");
+      game.changeScreen(new StartMenu());
+      break;
+    default:
+      console.error("Invalid button index");
+  }
 
   }
 
@@ -233,31 +235,40 @@ class PlayerSelect implements IScreen {
     const pressedThisFrame = keyIsPressed && !this.prevIsKeyPressed;
   
     if (pressedThisFrame) {
+      
       if (keyCode === LEFT_ARROW && this.lastKeyPressed !== "LEFT") {
-        if (this.activeButtonIndex !== 4) {
-          this.activeButtonIndex = (this.activeButtonIndex - 1 + 4) % 4;
+        if (this.activeButtonIndex !== 4 && this.activeButtonIndex !== 5) {        
+          this.activeButtonIndex = (this.activeButtonIndex - 1 + 4) % 4; 
         }
         this.lastKeyPressed = "LEFT";
       } else if (keyCode === RIGHT_ARROW && this.lastKeyPressed !== "RIGHT") {
-        if (this.activeButtonIndex !== 4) {
-          this.activeButtonIndex = (this.activeButtonIndex + 1) % 4;
+        if (this.activeButtonIndex !== 4 && this.activeButtonIndex !== 5) {   
+          this.activeButtonIndex = (this.activeButtonIndex + 1) % 4; 
         }
         this.lastKeyPressed = "RIGHT";
-      } else if (keyCode === ENTER) {
-        // Always activate the button, regardless of the index
+      }
+      // Handle up/down navigation between gameStartButton and returnButton
+      else if (keyCode === DOWN_ARROW && this.lastKeyPressed !== "DOWN") {
+        if (this.activeButtonIndex === 4) {
+          // Move from "START GAME" to "RETURN"
+          this.activeButtonIndex = 5;
+        }
+        this.lastKeyPressed = "DOWN";
+      } else if (keyCode === UP_ARROW && this.lastKeyPressed !== "UP") {
+        if (this.activeButtonIndex === 5) {
+          // Move from "RETURN" back to "START GAME"
+          this.activeButtonIndex = 4;
+        }
+        this.lastKeyPressed = "UP";
+      }
+      else if (keyCode === ENTER) {
         this.activateButton(this.activeButtonIndex);
-  
-        // If the active button is not the START GAME button, move to it after activation
-        if (this.activeButtonIndex !== 4) {
-          // activeIndexButton has values 0-3 for the players, this sets the selectedPlayers based on which option is selected, + 1 cause selectedPlayers starts with 0 and for each player its + 1
+
+        if (this.activeButtonIndex >= 0 && this.activeButtonIndex <= 3) {
+          // Update selected players and move focus to START GAME button
           this.selectedPlayers = this.activeButtonIndex + 1;
           this.lastPlayerButtonIndex = this.activeButtonIndex;
-          this.activeButtonIndex = 4;
-        } else {
-          // Start game with the amount of chosen players
-          if (this.selectedPlayers > 0) {
-            this.activateButton(4);
-          } 
+          this.activeButtonIndex = 4; // Focus on START GAME after selection
         }
       }
     }
@@ -268,6 +279,7 @@ class PlayerSelect implements IScreen {
   
     this.prevIsKeyPressed = keyIsPressed;
   }
+  
   
 
   public draw() {
